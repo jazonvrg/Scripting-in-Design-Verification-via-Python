@@ -1,8 +1,3 @@
-# vsim -voptargs="+acc" work.tb_top
-# Loading work.tb_top
-# Loading work.i2c_master_rtl
-UVM_INFO @ 0: reporter [RNTST] Running test i2c_base_test...
-UVM_INFO @ 1500: uvm_test_top.env.agent.monitor [MON] I2C Start condition detected
-Error: (vsim-3601) Iteration limit 5000 reached at time 2500 ns.
-UVM_ERROR @ 2500: uvm_test_top.env.scoreboard [SCB] Data mismatch! Expected: 'hA5, actual: 'h00
-UVM_INFO @ 5000: reporter [TEST_DONE] Test finished.
+UVM_INFO: Starting test...
+UVM_ERROR: Data mismatch detected with SEED 1234!
+UVM_INFO: Test finished.

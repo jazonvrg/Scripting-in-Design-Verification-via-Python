@@ -1,5 +1,6 @@
 import argparse
 import subprocess
+import re
 
 parser = argparse.ArgumentParser(description="EDA tool operate QuestaSim for I2C Project")
 
@@ -26,6 +27,26 @@ mock_cmd = ["echo"] + cmd
 process = subprocess.run(mock_cmd)
 
 if process.returncode == 0:
-	print(f"[SAFETY] Simulated process has completed without syntax error.")
+	print(f"[SAFETY] Syntax command has completed. Activating log scanner...")
+	
+	with open("transcript", "w") as f:
+		f.write(f"UVM_INFO: Starting test...\n")
+		f.write(f"UVM_ERROR: Data mismatch detected with SEED {args.seed}!\n")
+		f.write(f"UVM_INFO: Test finished.\n")
+
+		error_pattern = re.compile(r'(Error:|Fatal:|UVM_ERROR|UVM_FATAL)', re.IGNORECASE)
+		error_count = 0
+
+		with open("transcript", "r") as log_file:
+			for line in log_file:
+				if error_pattern.search(line):
+					error_count += 1
+
+		print("-" * 80)
+		if error_count > 0:
+			print(f"[FAILED] Test {args.testname} is failed! Capture {error_count} errors in transcript.")
+		else:
+			print(f"[PASSED] Test {args.testname} is perfectly passed.")
 else:
 	print(f"[CRASH] Simulated process has failed or Makefile is error.")
+
